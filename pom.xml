@@ -11,12 +11,18 @@
     </parent>
 
     <artifactId>stickypiston</artifactId>
+    <name>StickyPiston</name>
 
     <dependencies>
         <dependency>
             <groupId>org.laxio.piston</groupId>
             <artifactId>piston-api</artifactId>
             <version>1.12.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.laxio.piston</groupId>
+            <artifactId>protocol</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -16,7 +16,7 @@ public class StickyPistonServer implements PistonServer {
 
     @Override
     public String getVersion() {
-        return null;
+        return STICKY_PISTON_VERSION;
     }
 
     @Override
