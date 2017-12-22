@@ -18,11 +18,13 @@
             <groupId>org.laxio.piston</groupId>
             <artifactId>piston-api</artifactId>
             <version>1.12.2-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.laxio.piston</groupId>
             <artifactId>protocol</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -55,16 +57,16 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Implementation-Title>Piston</Implementation-Title>
-                            <Implementation-Version>${api.version}</Implementation-Version>
+                            <Implementation-Title>StickyPiston</Implementation-Title>
+                            <Implementation-Version>${describe}</Implementation-Version>
                             <Implementation-Vendor>${maven.build.timestamp}</Implementation-Vendor>
-                            <Specification-Title>StickyPiston</Specification-Title>
+                            <Specification-Title>Piston</Specification-Title>
                             <Specification-Version>${api.version}</Specification-Version>
                             <Specification-Vendor>Laxio Team</Specification-Vendor>
                         </manifestEntries>
                         <manifestSections>
                             <manifestSection>
-                                <name>org/laxio/</name>
+                                <name>org.laxio.piston.sticky</name>
                                 <manifestEntries>
                                     <Sealed>true</Sealed>
                                 </manifestEntries>
@@ -72,6 +74,19 @@
                         </manifestSections>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -83,5 +98,11 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 </project>

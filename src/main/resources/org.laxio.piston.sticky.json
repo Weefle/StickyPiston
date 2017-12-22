@@ -1,0 +1,8 @@
+{
+  "Implementation-Title": "${project.name}",
+  "Implementation-Version": "${describe}",
+  "Implementation-Vendor": "${project.organisation.name}",
+  "Specification-Title": "${piston-api.version}",
+  "Specification-Version": "${piston-api.api.version}",
+  "Specification-Vendor": "${project.organisation.name}"
+}
