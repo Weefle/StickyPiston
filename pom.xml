@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>piston-parent</artifactId>
+        <groupId>org.laxio.piston</groupId>
+        <version>1.12.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>stickypiston</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.laxio.piston</groupId>
+            <artifactId>piston-api</artifactId>
+            <version>1.12.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <buildtag.prefix>git-StickyProtocol-</buildtag.prefix>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.md-5</groupId>
+                <artifactId>scriptus</artifactId>
+                <version>0.2</version>
+                <configuration>
+                    <format>${buildtag.prefix}%s${buildtag.suffix}</format>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>describe</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Title>Piston</Implementation-Title>
+                            <Implementation-Version>${api.version}</Implementation-Version>
+                            <Implementation-Vendor>${maven.build.timestamp}</Implementation-Vendor>
+                            <Specification-Title>StickyPiston</Specification-Title>
+                            <Specification-Version>${api.version}</Specification-Version>
+                            <Specification-Vendor>Laxio Team</Specification-Vendor>
+                        </manifestEntries>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>org/laxio/</name>
+                                <manifestEntries>
+                                    <Sealed>true</Sealed>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
