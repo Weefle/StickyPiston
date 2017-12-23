@@ -18,7 +18,7 @@
             <groupId>org.laxio.piston</groupId>
             <artifactId>piston-api</artifactId>
             <version>1.12.2-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.laxio.piston</groupId>
@@ -26,10 +26,16 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20171018</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <properties>
-        <buildtag.prefix>git-StickyProtocol-</buildtag.prefix>
+        <buildtag.prefix>git-StickyPiston-</buildtag.prefix>
     </properties>
 
     <build>
@@ -40,6 +46,7 @@
                 <version>0.2</version>
                 <configuration>
                     <format>${buildtag.prefix}%s${buildtag.suffix}</format>
+                    <scmDirectory>../.git/modules/stickypiston/</scmDirectory>
                 </configuration>
                 <executions>
                     <execution>
