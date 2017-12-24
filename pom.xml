@@ -35,7 +35,7 @@
     </dependencies>
 
     <properties>
-        <buildtag.prefix>git-StickyPiston-</buildtag.prefix>
+        <buildtag.prefix>git-${project.version}-</buildtag.prefix>
     </properties>
 
     <build>
