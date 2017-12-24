@@ -65,11 +65,9 @@
                     <archive>
                         <manifestEntries>
                             <Implementation-Title>StickyPiston</Implementation-Title>
+                            <!--suppress MavenModelInspection -->
                             <Implementation-Version>${describe}</Implementation-Version>
                             <Implementation-Vendor>${maven.build.timestamp}</Implementation-Vendor>
-                            <Specification-Title>Piston</Specification-Title>
-                            <Specification-Version>${api.version}</Specification-Version>
-                            <Specification-Vendor>Laxio Team</Specification-Vendor>
                         </manifestEntries>
                         <manifestSections>
                             <manifestSection>
