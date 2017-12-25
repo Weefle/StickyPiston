@@ -1,18 +1,11 @@
 package org.laxio.piston.sticky;
 
-import org.json.JSONObject;
 import org.laxio.piston.piston.Piston;
-import org.laxio.piston.piston.util.Environment;
-import org.laxio.piston.piston.versioning.PistonModule;
-import org.laxio.piston.piston.versioning.Version;
-import org.laxio.piston.protocol.v340.StickyProtocol;
+import org.laxio.piston.protocol.v340.StickyProtocolV340;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.stream.Collectors;
 
+import static org.laxio.piston.piston.versioning.PistonModule.build;
 import static org.laxio.piston.piston.versioning.PistonModuleType.*;
 
 /**
@@ -38,85 +31,16 @@ public class StickyInitiator {
              */
 
             try {
-                JSONObject json = getJSON("/" + debug() + "org.laxio.piston.ignition.json");
-                PistonModule ignition = build(json, "Implementation");
-                IGNITION.setModule(ignition);
+                IGNITION.setModule(build("org.laxio.piston.ignition.json", "Implementation"));
             } catch (Exception ex) {
                 // ignore, not required
             }
 
-            JSONObject json = getJSON(Piston.class);
-            PistonModule piston = build(json, "Specification");
-            PISTON.setModule(piston);
-
-            json = getJSON(StickyPistonServer.class);
-            PistonModule stickypiston = build(json, "Implementation");
-            STICKYPISTON.setModule(stickypiston);
-
-            json = getJSON(StickyProtocol.class);
-            PistonModule protocol = build(json, "Implementation");
-            PROTOCOL.setModule(protocol);
-
-            json = getJSON(StickyProtocol.class);
-            PistonModule minecraft = build(json, "Specification");
-            MINECRAFT.setModule(minecraft);
+            PISTON.setModule(build(Piston.class, "Specification"));
+            STICKYPISTON.setModule(build(StickyPistonServer.class, "Implementation"));
+            PROTOCOL.setModule(build(StickyProtocolV340.class, "Implementation"));
+            MINECRAFT.setModule(build(StickyProtocolV340.class, "Specification"));
         }
-    }
-
-    /**
-     * Builds a JSON object based on the package name of the supplied class
-     * @param cls The class to get the package name from
-     * @return The JSON object for that class
-     * @throws IOException
-     */
-    private static JSONObject getJSON(Class<?> cls) throws IOException {
-        return getJSON("/" + debug() + cls.getPackage().getName() + ".json");
-    }
-
-
-    /**
-     * Builds a JSON object using the supplied path
-     * @param path The path
-     * @return The JSON object for the supplied path
-     * @throws IOException
-     */
-    private static JSONObject getJSON(String path) throws IOException {
-        return new JSONObject(read(StickyInitiator.class.getResourceAsStream(path)));
-    }
-
-    /**
-     * Builds a module using the supplied JSON object and tag
-     * @param json The JSON object to look in
-     * @param tag The prefix tag, usually Specification or Implementation
-     * @return A constructed module for the supplied parameters
-     */
-    private static PistonModule build(JSONObject json, String tag) {
-        String title = json.getString(tag + "-Title");
-        String version = json.getString(tag + "-Version");
-        String vendor = json.getString(tag + "-Vendor");
-
-        Version ver = Version.parse(version);
-        return new PistonModule(title, ver, vendor);
-    }
-
-    /**
-     * Translates a stream into a single string
-     * @param input The stream to translate
-     * @return The complete string
-     * @throws IOException
-     */
-    private static String read(InputStream input) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
-            return reader.lines().collect(Collectors.joining("\n"));
-        }
-    }
-
-    /**
-     * Returns the test prefix if debug mode is enabled
-     * @return "test-" if debug mode is enabled, otherwise ""
-     */
-    private static String debug() {
-        return Environment.isDebugMode() ? "test-" : "";
     }
 
 }
