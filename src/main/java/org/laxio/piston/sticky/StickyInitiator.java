@@ -5,7 +5,7 @@ import org.laxio.piston.piston.Piston;
 import org.laxio.piston.piston.util.Environment;
 import org.laxio.piston.piston.versioning.PistonModule;
 import org.laxio.piston.piston.versioning.Version;
-import org.laxio.piston.protocol.v001.StickyProtocol;
+import org.laxio.piston.protocol.v340.StickyProtocol;
 
 import java.io.BufferedReader;
 import java.io.IOException;
