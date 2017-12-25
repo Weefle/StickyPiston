@@ -2,6 +2,7 @@ package org.laxio.piston.sticky;
 
 import org.json.JSONObject;
 import org.laxio.piston.piston.Piston;
+import org.laxio.piston.piston.util.Environment;
 import org.laxio.piston.piston.versioning.PistonModule;
 import org.laxio.piston.piston.versioning.Version;
 import org.laxio.piston.protocol.v001.StickyProtocol;
@@ -37,7 +38,7 @@ public class StickyInitiator {
              */
 
             try {
-                JSONObject json = getJSON("/org.laxio.piston.ignition.json");
+                JSONObject json = getJSON("/" + debug() + "org.laxio.piston.ignition.json");
                 PistonModule ignition = build(json, "Implementation");
                 IGNITION.setModule(ignition);
             } catch (Exception ex) {
@@ -69,7 +70,7 @@ public class StickyInitiator {
      * @throws IOException
      */
     private static JSONObject getJSON(Class<?> cls) throws IOException {
-        return getJSON("/" + cls.getPackage().getName() + ".json");
+        return getJSON("/" + debug() + cls.getPackage().getName() + ".json");
     }
 
 
@@ -108,6 +109,14 @@ public class StickyInitiator {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
+    }
+
+    /**
+     * Returns the test prefix if debug mode is enabled
+     * @return "test-" if debug mode is enabled, otherwise ""
+     */
+    private static String debug() {
+        return Environment.isDebugMode() ? "test-" : "";
     }
 
 }
