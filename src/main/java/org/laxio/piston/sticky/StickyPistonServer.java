@@ -1,6 +1,7 @@
 package org.laxio.piston.sticky;
 
 import org.laxio.piston.piston.PistonServer;
+import org.laxio.piston.piston.event.ListenerManager;
 import org.laxio.piston.piston.protocol.Protocol;
 
 public class StickyPistonServer implements PistonServer {
@@ -9,9 +10,11 @@ public class StickyPistonServer implements PistonServer {
     private static final String STICKY_PISTON_VERSION; // Protocol Version (Implementation)
 
     private final Protocol protocol;
+    private final ListenerManager manager;
 
     public StickyPistonServer(Protocol protocol) {
         this.protocol = protocol;
+        this.manager = new ListenerManager();
     }
 
     @Override
@@ -27,6 +30,11 @@ public class StickyPistonServer implements PistonServer {
     @Override
     public Protocol getProtocol() {
         return protocol;
+    }
+
+    @Override
+    public ListenerManager getManager() {
+        return manager;
     }
 
     static {
