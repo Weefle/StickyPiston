@@ -1,23 +1,29 @@
 package org.laxio.piston.sticky.entity.player;
 
 import org.laxio.piston.piston.entity.EntityType;
-import org.laxio.piston.piston.player.Player;
+import org.laxio.piston.piston.entity.player.Player;
+import org.laxio.piston.piston.session.Profile;
+import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.sticky.entity.PistonEntity;
-
-import java.util.UUID;
 
 public class PistonPlayer extends PistonEntity implements Player {
 
-    private String name;
+    private Profile profile;
 
-    public PistonPlayer(String name) {
-        super(null);
-        this.name = name;
+    private String name;
+    private Connection connection;
+
+    public PistonPlayer(Profile profile, Connection connection) {
+        super(profile.getUniqueId());
+        this.profile = profile;
+
+        this.name = profile.getName();
+        this.connection = connection;
     }
 
-    public PistonPlayer(UUID uuid, String name) {
-        super(uuid);
-        this.name = name;
+    @Override
+    public Profile getProfile() {
+        return profile;
     }
 
     @Override
@@ -28,6 +34,11 @@ public class PistonPlayer extends PistonEntity implements Player {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return connection;
     }
 
 }

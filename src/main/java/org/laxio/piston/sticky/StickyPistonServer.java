@@ -3,8 +3,11 @@ package org.laxio.piston.sticky;
 import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.event.ListenerManager;
 import org.laxio.piston.piston.protocol.Protocol;
+import org.laxio.piston.piston.session.MinecraftSessionService;
+import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.listener.LoginListener;
 import org.laxio.piston.sticky.listener.StatusListener;
+import org.laxio.piston.sticky.session.OfflineSessionService;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -17,13 +20,16 @@ public class StickyPistonServer implements PistonServer {
 
     private final KeyPair keyPair;
     private final boolean onlineMode;
+    private final MinecraftSessionService sessionService;
 
     private final Protocol protocol;
     private final ListenerManager manager;
 
     public StickyPistonServer(Protocol protocol) {
-        this.onlineMode = false;
+        this.onlineMode = true;
         this.keyPair = (onlineMode ? generate() : null);
+        this.sessionService = (onlineMode ? new MojangSessionService() : new OfflineSessionService());
+
         this.protocol = protocol;
         this.manager = new ListenerManager();
 
@@ -59,6 +65,11 @@ public class StickyPistonServer implements PistonServer {
     @Override
     public ListenerManager getManager() {
         return manager;
+    }
+
+    @Override
+    public MinecraftSessionService getSessionService() {
+        return sessionService;
     }
 
     private KeyPair generate() {
