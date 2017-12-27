@@ -1,5 +1,6 @@
 package org.laxio.piston.sticky.entity.player;
 
+import org.laxio.piston.piston.entity.EntityType;
 import org.laxio.piston.piston.player.Player;
 import org.laxio.piston.sticky.entity.PistonEntity;
 
@@ -15,8 +16,13 @@ public class PistonPlayer extends PistonEntity implements Player {
     }
 
     public PistonPlayer(UUID uuid, String name) {
-        super(uuid, null);
+        super(uuid);
         this.name = name;
+    }
+
+    @Override
+    public EntityType getType() {
+        return EntityType.PLAYER;
     }
 
     @Override
