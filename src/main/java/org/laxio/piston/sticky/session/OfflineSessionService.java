@@ -10,6 +10,11 @@ public class OfflineSessionService implements MinecraftSessionService {
 
     @Override
     public SessionResponse hasJoined(Profile profile, String serverId) {
+        return hasJoined(profile, serverId, null);
+    }
+
+    @Override
+    public SessionResponse hasJoined(Profile profile, String serverId, String ip) {
         return new SessionResponse(profile.getName(), UUID.randomUUID());
     }
 

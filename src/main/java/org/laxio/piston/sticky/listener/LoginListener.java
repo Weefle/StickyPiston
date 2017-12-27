@@ -7,9 +7,8 @@ import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.piston.protocol.Packet;
 import org.laxio.piston.piston.protocol.ProtocolState;
-import org.laxio.piston.piston.session.MinecraftSessionService;
 import org.laxio.piston.protocol.v340.netty.NetworkClient;
-import org.laxio.piston.protocol.v340.netty.pipeline.PacketEncryption;
+import org.laxio.piston.protocol.v340.netty.pipeline.encryption.PacketEncryption;
 import org.laxio.piston.protocol.v340.packet.login.client.DisconnectPacket;
 import org.laxio.piston.protocol.v340.packet.login.client.EncryptionRequestPacket;
 import org.laxio.piston.protocol.v340.packet.login.client.LoginSuccessPacket;
@@ -56,13 +55,17 @@ public class LoginListener implements Listener {
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onResponse(EncryptionResponsePacket packet) {
         NetworkClient client = (NetworkClient) packet.getConnection();
+        PublicKey key = packet.getServer().getKeyPair().getPublic();
+        PrivateKey priv = packet.getServer().getKeyPair().getPrivate();
+
+        SecretKey secret = packet.getSecretKey(priv);
+        client.getEncryptionHold().generate(secret);
+        client.setEncryption(client.getEncryptionHold());
+
         byte[] token = packet.getVerifyToken();
         token = packet.decipher(client.getServer().getKeyPair().getPrivate(), token);
 
         byte[] verify = client.getEncryptionHold().getVerifyToken();
-        Logger.getGlobal().info("Checking " + Arrays.toString(token) + " against " + Arrays.toString(verify));
-
-        client.setEncryption(client.getEncryptionHold());
 
         if (!Arrays.equals(token, verify)) {
             Logger.getGlobal().info("cya");
@@ -70,13 +73,11 @@ public class LoginListener implements Listener {
             return;
         }
 
-        PublicKey key = packet.getServer().getKeyPair().getPublic();
-        PrivateKey priv = packet.getServer().getKeyPair().getPrivate();
-
-        SecretKey secret = packet.getSecretKey(priv);
         String hash = BrokenHash.hash("", key, secret);
+        Logger.getGlobal().info("Packet: " + packet);
         Logger.getGlobal().info("hash: " + hash);
         client.getProfile().authenticate(hash);
+        login(packet, client.getProfile());
     }
 
     private void login(Packet packet, UserProfile profile) {
