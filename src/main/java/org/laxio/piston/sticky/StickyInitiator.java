@@ -10,6 +10,7 @@ import static org.laxio.piston.piston.versioning.PistonModuleType.*;
 
 /**
  * Sets up Piston Modules
+ *
  * @see org.laxio.piston.piston.versioning.PistonModule
  */
 public class StickyInitiator {
@@ -18,6 +19,7 @@ public class StickyInitiator {
 
     /**
      * Creates PistonModules for all available
+     *
      * @see org.laxio.piston.piston.versioning.PistonModuleType
      */
     public static void setup() throws IOException {
