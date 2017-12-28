@@ -28,7 +28,6 @@ public class LoginListener implements Listener {
 
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onStart(LoginStartPacket packet) {
-        Logger.getGlobal().info("Start: " + packet);
         NetworkClient client = (NetworkClient) packet.getConnection();
 
         UserProfile profile = new UserProfile(client.getServer().getSessionService(), packet.getName());
@@ -42,7 +41,6 @@ public class LoginListener implements Listener {
 
             PublicKey key = packet.getServer().getKeyPair().getPublic();
             byte[] verifyToken = encryption.getVerifyToken();
-            Logger.getGlobal().info("Verify token: " + Arrays.toString(verifyToken));
 
             EncryptionRequestPacket request = new EncryptionRequestPacket("", key, verifyToken);
             packet.reply(request);
@@ -68,14 +66,11 @@ public class LoginListener implements Listener {
         byte[] verify = client.getEncryptionHold().getVerifyToken();
 
         if (!Arrays.equals(token, verify)) {
-            Logger.getGlobal().info("cya");
             packet.reply(new DisconnectPacket("cya faker"));
             return;
         }
 
         String hash = BrokenHash.hash("", key, secret);
-        Logger.getGlobal().info("Packet: " + packet);
-        Logger.getGlobal().info("hash: " + hash);
         client.getProfile().authenticate(hash);
         login(packet, client.getProfile());
     }
