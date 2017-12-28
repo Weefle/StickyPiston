@@ -1,9 +1,9 @@
 package org.laxio.piston.sticky.listener;
 
+import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
-import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.piston.protocol.Packet;
 import org.laxio.piston.piston.protocol.ProtocolState;

@@ -3,8 +3,8 @@ package org.laxio.piston.sticky.entity.player;
 import org.laxio.piston.piston.chat.StatusLevel;
 import org.laxio.piston.piston.entity.EntityType;
 import org.laxio.piston.piston.entity.player.Player;
-import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.piston.protocol.Connection;
+import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.sticky.entity.PistonEntity;
 
 public class PistonPlayer extends PistonEntity implements Player {

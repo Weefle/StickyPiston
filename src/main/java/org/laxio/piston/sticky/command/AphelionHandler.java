@@ -64,14 +64,14 @@ public class AphelionHandler {
 
         try {
             aphelion.invoke(sender, command, args, handler);
-        } catch(CommandPermissionException e) {
+        } catch (CommandPermissionException e) {
             sender.sendMessage(StatusLevel.WARNING, "No permission.");
-        } catch(CommandUsageException e) {
+        } catch (CommandUsageException e) {
             sender.sendMessage(StatusLevel.WARNING, e.getMessage());
             sender.sendMessage(StatusLevel.WARNING, "/" + command + " " + handler.getUsage());
-        } catch(CommandException e) {
+        } catch (CommandException e) {
             if (e.getCause() != null) {
-                if(e.getCause() instanceof NumberFormatException) {
+                if (e.getCause() instanceof NumberFormatException) {
                     sender.sendMessage(StatusLevel.WARNING, "Number expected, string received instead.");
                 } else {
                     sender.sendMessage(StatusLevel.WARNING, "An error has occurred. See console.");

@@ -17,7 +17,6 @@ import org.laxio.piston.sticky.listener.StatusListener;
 import org.laxio.piston.sticky.session.OfflineSessionService;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -28,16 +27,20 @@ public class StickyPistonServer implements PistonServer {
     private static final String MC_PROTOCOL_VERSION; // MC Version (Specification)
     private static final String STICKY_PISTON_VERSION; // Protocol Version (Implementation)
 
+    static {
+        MC_PROTOCOL_VERSION = StickyPistonServer.class.getPackage().getSpecificationVersion();
+        STICKY_PISTON_VERSION = StickyPistonServer.class.getPackage().getImplementationVersion();
+    }
+
     private final KeyPair keyPair;
     private final boolean onlineMode;
     private final MinecraftSessionService sessionService;
-
-    private NetworkServer network;
     private final Protocol protocol;
     private final ListenerManager manager;
 
     private final ConsoleCommandSender console;
     private final AphelionHandler aphelion;
+    private NetworkServer network;
 
     public StickyPistonServer(Protocol protocol) {
         this.onlineMode = true;
@@ -136,11 +139,6 @@ public class StickyPistonServer implements PistonServer {
             ex.printStackTrace();
             return null;
         }
-    }
-
-    static {
-        MC_PROTOCOL_VERSION = StickyPistonServer.class.getPackage().getSpecificationVersion();
-        STICKY_PISTON_VERSION = StickyPistonServer.class.getPackage().getImplementationVersion();
     }
 
 }

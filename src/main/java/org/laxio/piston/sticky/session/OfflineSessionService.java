@@ -1,7 +1,7 @@
 package org.laxio.piston.sticky.session;
 
-import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.piston.session.MinecraftSessionService;
+import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.piston.session.SessionResponse;
 
 import java.util.UUID;

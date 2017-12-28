@@ -1,10 +1,7 @@
 package org.laxio.piston.sticky.command;
 
 import org.laxio.piston.piston.chat.StatusLevel;
-import org.laxio.piston.piston.command.CommandSender;
 import org.laxio.piston.piston.command.ConsoleCommandSender;
-
-import java.util.logging.Logger;
 
 public class PistonConsoleCommandSender implements ConsoleCommandSender {
 

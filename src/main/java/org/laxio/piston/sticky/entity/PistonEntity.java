@@ -1,7 +1,6 @@
 package org.laxio.piston.sticky.entity;
 
 import org.laxio.piston.piston.entity.Entity;
-import org.laxio.piston.piston.entity.ObjectEntityType;
 import org.laxio.piston.piston.entity.Velocity;
 import org.laxio.piston.piston.world.Location;
 
