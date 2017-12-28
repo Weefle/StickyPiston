@@ -1,5 +1,6 @@
 package org.laxio.piston.sticky.entity.player;
 
+import org.laxio.piston.piston.chat.StatusLevel;
 import org.laxio.piston.piston.entity.EntityType;
 import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.session.Profile;
@@ -39,6 +40,22 @@ public class PistonPlayer extends PistonEntity implements Player {
     @Override
     public Connection getConnection() {
         return connection;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        // TODO: send message packet
+    }
+
+    @Override
+    public void sendMessage(StatusLevel level, String message) {
+        sendMessage(level.getColor() + message);
+    }
+
+    @Override
+    public boolean hasPermission(String string) {
+        // TODO: permissions system
+        return false;
     }
 
 }

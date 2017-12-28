@@ -1,11 +1,17 @@
 package org.laxio.piston.sticky;
 
+import me.hfox.aphelion.Aphelion;
+import me.hfox.aphelion.CommandRegistration;
 import org.laxio.piston.piston.PistonServer;
+import org.laxio.piston.piston.command.CommandSender;
+import org.laxio.piston.piston.command.ConsoleCommandSender;
 import org.laxio.piston.piston.event.ListenerManager;
 import org.laxio.piston.piston.protocol.Protocol;
 import org.laxio.piston.piston.session.MinecraftSessionService;
 import org.laxio.piston.protocol.v340.netty.NetworkServer;
 import org.laxio.piston.protocol.v340.session.MojangSessionService;
+import org.laxio.piston.sticky.command.AphelionHandler;
+import org.laxio.piston.sticky.command.PistonConsoleCommandSender;
 import org.laxio.piston.sticky.listener.LoginListener;
 import org.laxio.piston.sticky.listener.StatusListener;
 import org.laxio.piston.sticky.session.OfflineSessionService;
@@ -15,6 +21,7 @@ import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Logger;
 
 public class StickyPistonServer implements PistonServer {
 
@@ -29,6 +36,9 @@ public class StickyPistonServer implements PistonServer {
     private final Protocol protocol;
     private final ListenerManager manager;
 
+    private final ConsoleCommandSender console;
+    private final AphelionHandler aphelion;
+
     public StickyPistonServer(Protocol protocol) {
         this.onlineMode = true;
         this.keyPair = (onlineMode ? generate() : null);
@@ -39,6 +49,9 @@ public class StickyPistonServer implements PistonServer {
 
         this.manager.register(new StatusListener());
         this.manager.register(new LoginListener());
+
+        this.console = new PistonConsoleCommandSender();
+        this.aphelion = new AphelionHandler();
     }
 
     @Override
@@ -87,6 +100,30 @@ public class StickyPistonServer implements PistonServer {
     @Override
     public InetSocketAddress getBindAddress() {
         return network.getAddress();
+    }
+
+    @Override
+    public Logger getLogger() {
+        return Logger.getGlobal();
+    }
+
+    @Override
+    public ConsoleCommandSender getConsole() {
+        return console;
+    }
+
+    @Override
+    public Aphelion<CommandSender> getAphelion() {
+        return aphelion.getAphelion();
+    }
+
+    public AphelionHandler getAphelionHandler() {
+        return aphelion;
+    }
+
+    @Override
+    public CommandRegistration<CommandSender> getCommandRegistration() {
+        return aphelion.getRegistration();
     }
 
     private KeyPair generate() {

@@ -27,9 +27,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20171018</version>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>1.16</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
