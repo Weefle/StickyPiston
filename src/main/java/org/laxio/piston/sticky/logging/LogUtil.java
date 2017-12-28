@@ -3,6 +3,9 @@ package org.laxio.piston.sticky.logging;
 import org.fusesource.jansi.Ansi;
 import org.laxio.piston.piston.chat.ChatColor;
 import org.laxio.piston.piston.chat.StatusLevel;
+import org.laxio.piston.piston.versioning.PistonModule;
+import org.laxio.piston.piston.versioning.PistonModuleType;
+import org.laxio.piston.piston.versioning.Version;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -89,7 +92,23 @@ public class LogUtil {
         }
 
         logger.addHandler(handle);
-        logger.info("Loaded");
+
+        for (PistonModuleType type : PistonModuleType.values()) {
+            PistonModule module = type.getModule();
+            Version version = module.getVersion();
+
+            String name = version.toString();
+            if (version.getPrefix() != null && version.getPrefix().equalsIgnoreCase("git")) {
+                name = version.toString(false);
+                if (version.getSuffix() != null) {
+                    name = name + "-" + version.getSuffix();
+                }
+
+                name = name + " (git)";
+            }
+
+            logger.info("Loaded " + module.getTitle() + " v" + name);
+        }
     }
 
     private static void colour(Level level, StatusLevel status) {
