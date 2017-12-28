@@ -13,5 +13,9 @@ before_install:
     - git submodule update --init --recursive
     - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
     - cd ../
+    - git clone https://github.com/hfoxy/Aphelion
+    - cd Aphelion/Core
+    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    - cd ../../
 after_success:
   - mvn clean test jacoco:report coveralls:report
