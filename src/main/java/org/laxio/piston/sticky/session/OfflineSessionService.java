@@ -4,6 +4,7 @@ import org.laxio.piston.piston.session.MinecraftSessionService;
 import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.piston.session.SessionResponse;
 
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 public class OfflineSessionService implements MinecraftSessionService {
@@ -15,7 +16,11 @@ public class OfflineSessionService implements MinecraftSessionService {
 
     @Override
     public SessionResponse hasJoined(Profile profile, String serverId, String ip) {
-        return new SessionResponse(profile.getName(), UUID.randomUUID());
+        String name = profile.getName();
+        String offline = "OfflinePlayer:" + name;
+        byte[] bytes = offline.getBytes(Charset.forName("UTF-8"));
+
+        return new SessionResponse(name, UUID.nameUUIDFromBytes(bytes));
     }
 
 }
