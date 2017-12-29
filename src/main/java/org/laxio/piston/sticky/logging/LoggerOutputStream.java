@@ -24,7 +24,6 @@ public class LoggerOutputStream extends ByteArrayOutputStream {
             if (record.length() > 0 && !record.equals(this.separator)) {
                 this.logger.log(this.level, record);
             }
-
         }
     }
 

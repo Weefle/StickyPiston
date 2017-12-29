@@ -6,12 +6,14 @@ import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.command.CommandSender;
 import org.laxio.piston.piston.command.ConsoleCommandSender;
 import org.laxio.piston.piston.event.ListenerManager;
+import org.laxio.piston.piston.logging.Logger;
 import org.laxio.piston.piston.protocol.Protocol;
 import org.laxio.piston.piston.session.MinecraftSessionService;
 import org.laxio.piston.protocol.v340.netty.NetworkServer;
 import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.command.AphelionHandler;
 import org.laxio.piston.sticky.command.PistonConsoleCommandSender;
+import org.laxio.piston.sticky.listener.FeatureListener;
 import org.laxio.piston.sticky.listener.LoginListener;
 import org.laxio.piston.sticky.listener.StatusListener;
 import org.laxio.piston.sticky.session.OfflineSessionService;
@@ -20,7 +22,6 @@ import java.net.InetSocketAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Logger;
 
 public class StickyPistonServer implements PistonServer {
 
@@ -52,6 +53,7 @@ public class StickyPistonServer implements PistonServer {
 
         this.manager.register(new StatusListener());
         this.manager.register(new LoginListener(this));
+        this.manager.register(new FeatureListener());
 
         this.console = new PistonConsoleCommandSender();
         this.aphelion = new AphelionHandler();

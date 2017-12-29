@@ -6,6 +6,7 @@ import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
 import org.laxio.piston.piston.event.login.PlayerPreLoginEvent;
+import org.laxio.piston.piston.logging.Logger;
 import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.piston.protocol.Packet;
 import org.laxio.piston.piston.protocol.ProtocolState;
@@ -88,8 +89,14 @@ public class LoginListener implements Listener {
         PlayerPreLoginEvent event = new PlayerPreLoginEvent(player);
         player.getServer().getManager().call(event);
 
+        if (event.getResult() != PlayerPreLoginEvent.LoginResult.ALLOWED) {
+            Logger.getGlobal().info("Player '{}' disconnected [{}]: {}", player.getName(), player.getConnection().getAddress(), event.getResult().name());
+            packet.reply(new DisconnectPacket(event.getKickMessage()));
+            return;
+        }
+
         packet.reply(login(profile, packet.getConnection()));
-        // Logger.getGlobal().info("Login success!");
+        Logger.getGlobal().info("Player '{}' logged in [{}]", player.getName(), player.getConnection().getAddress());
     }
 
     private LoginSuccessPacket login(UserProfile profile, Connection connection) {
