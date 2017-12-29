@@ -1,5 +1,7 @@
 package org.laxio.piston.sticky.entity.player;
 
+import org.json.JSONObject;
+import org.laxio.piston.piston.chat.ChatPosition;
 import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.chat.MessageComponent;
 import org.laxio.piston.piston.chat.StatusLevel;
@@ -45,18 +47,19 @@ public class PistonPlayer extends PistonEntity implements Player {
     }
 
     @Override
-    public void sendMessage(String message) {
-        sendMessage(MessageBuilder.builder().message(message).build());
+    public void sendMessage(ChatPosition position, String message) {
+        sendMessage(position, MessageBuilder.builder().message(message).build());
     }
 
     @Override
-    public void sendMessage(StatusLevel level, String message) {
-        sendMessage(level.getColor() + message);
+    public void sendMessage(ChatPosition position, StatusLevel level, String message) {
+        sendMessage(position, level.getColor() + message);
     }
 
     @Override
-    public void sendMessage(MessageComponent message) {
-
+    public void sendMessage(ChatPosition position, MessageComponent message) {
+        JSONObject json = message.toJSON();
+        // TODO: send packet
     }
 
     @Override
