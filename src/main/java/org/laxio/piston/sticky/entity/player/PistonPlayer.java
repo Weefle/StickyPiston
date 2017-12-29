@@ -6,24 +6,29 @@ import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.chat.MessageComponent;
 import org.laxio.piston.piston.chat.StatusLevel;
 import org.laxio.piston.piston.entity.EntityType;
+import org.laxio.piston.piston.entity.Metadata;
 import org.laxio.piston.piston.entity.player.Player;
+import org.laxio.piston.piston.entity.player.Statistic;
 import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.piston.session.Profile;
 import org.laxio.piston.sticky.entity.PistonEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PistonPlayer extends PistonEntity implements Player {
 
     private Profile profile;
-
-    private String name;
     private Connection connection;
+
+    private List<Statistic> statistics;
 
     public PistonPlayer(Profile profile, Connection connection) {
         super(profile.getUniqueId());
         this.profile = profile;
-
-        this.name = profile.getName();
         this.connection = connection;
+
+        this.statistics = new ArrayList<>();
     }
 
     @Override
@@ -38,7 +43,7 @@ public class PistonPlayer extends PistonEntity implements Player {
 
     @Override
     public String getName() {
-        return name;
+        return profile.getName();
     }
 
     @Override
@@ -66,6 +71,27 @@ public class PistonPlayer extends PistonEntity implements Player {
     public boolean hasPermission(String string) {
         // TODO: permissions system
         return false;
+    }
+
+    @Override
+    public List<Statistic> getStatistics() {
+        return statistics;
+    }
+
+    @Override
+    public Statistic getStatistic(String name) {
+        for (Statistic statistic : getStatistics()) {
+            if (statistic.getName().equals(name)) {
+                return statistic;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Metadata getMetadata() {
+        return null;
     }
 
 }
