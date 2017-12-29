@@ -1,9 +1,11 @@
 package org.laxio.piston.sticky.listener;
 
+import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
+import org.laxio.piston.piston.event.login.PlayerPreLoginEvent;
 import org.laxio.piston.piston.protocol.Connection;
 import org.laxio.piston.piston.protocol.Packet;
 import org.laxio.piston.piston.protocol.ProtocolState;
@@ -22,9 +24,14 @@ import javax.crypto.SecretKey;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 public class LoginListener implements Listener {
+
+    private final PistonServer server;
+
+    public LoginListener(PistonServer server) {
+        this.server = server;
+    }
 
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onStart(LoginStartPacket packet) {
@@ -66,22 +73,27 @@ public class LoginListener implements Listener {
         byte[] verify = client.getEncryptionHold().getVerifyToken();
 
         if (!Arrays.equals(token, verify)) {
-            packet.reply(new DisconnectPacket("cya faker"));
+            packet.reply(new DisconnectPacket("Invalid nonce"));
             return;
         }
 
         String hash = BrokenHash.hash("", key, secret);
         client.getProfile().authenticate(hash);
+
         login(packet, client.getProfile());
     }
 
     private void login(Packet packet, UserProfile profile) {
+        Player player = new PistonPlayer(server, profile, packet.getConnection());
+        PlayerPreLoginEvent event = new PlayerPreLoginEvent(player);
+        player.getServer().getManager().call(event);
+
         packet.reply(login(profile, packet.getConnection()));
-        Logger.getGlobal().info("Login success!");
+        // Logger.getGlobal().info("Login success!");
     }
 
     private LoginSuccessPacket login(UserProfile profile, Connection connection) {
-        Player player = new PistonPlayer(profile, connection);
+        Player player = new PistonPlayer(server, profile, connection);
         connection.setState(ProtocolState.PLAY);
         return new LoginSuccessPacket(player);
     }

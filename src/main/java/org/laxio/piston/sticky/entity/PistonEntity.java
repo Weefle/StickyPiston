@@ -1,5 +1,6 @@
 package org.laxio.piston.sticky.entity;
 
+import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.entity.Entity;
 import org.laxio.piston.piston.entity.Velocity;
 import org.laxio.piston.piston.world.Location;
@@ -12,22 +13,30 @@ public abstract class PistonEntity implements Entity {
 
     protected static int entityId = 1;
 
-    private int id;
-    private UUID uuid;
+    private final PistonServer server;
+
+    private final int id;
+    private final UUID uuid;
     private Location location;
     private Velocity velocity;
 
-    public PistonEntity() {
-        this(null);
+    public PistonEntity(PistonServer server) {
+        this(server, null);
     }
 
-    public PistonEntity(UUID uuid) {
+    public PistonEntity(PistonServer server, UUID uuid) {
+        this.server = server;
         synchronized (lock) {
             this.id = entityId++;
             entityId++;
         }
 
         this.uuid = uuid == null ? UUID.randomUUID() : uuid;
+    }
+
+    @Override
+    public PistonServer getServer() {
+        return server;
     }
 
     @Override

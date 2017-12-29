@@ -51,7 +51,7 @@ public class StickyPistonServer implements PistonServer {
         this.manager = new ListenerManager();
 
         this.manager.register(new StatusListener());
-        this.manager.register(new LoginListener());
+        this.manager.register(new LoginListener(this));
 
         this.console = new PistonConsoleCommandSender();
         this.aphelion = new AphelionHandler();

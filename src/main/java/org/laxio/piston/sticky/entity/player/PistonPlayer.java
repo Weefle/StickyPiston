@@ -1,6 +1,7 @@
 package org.laxio.piston.sticky.entity.player;
 
 import org.json.JSONObject;
+import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.chat.ChatPosition;
 import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.chat.MessageComponent;
@@ -23,8 +24,8 @@ public class PistonPlayer extends PistonEntity implements Player {
 
     private List<Statistic> statistics;
 
-    public PistonPlayer(Profile profile, Connection connection) {
-        super(profile.getUniqueId());
+    public PistonPlayer(PistonServer server, Profile profile, Connection connection) {
+        super(server, profile.getUniqueId());
         this.profile = profile;
         this.connection = connection;
 
