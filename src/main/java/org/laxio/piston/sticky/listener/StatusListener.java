@@ -1,5 +1,7 @@
 package org.laxio.piston.sticky.listener;
 
+import org.laxio.piston.piston.chat.ChatColor;
+import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
@@ -13,7 +15,9 @@ public class StatusListener implements Listener {
 
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onRequest(RequestPacket packet) {
-        packet.reply(new ResponsePacket());
+        MessageBuilder builder = MessageBuilder.builder();
+        builder.message(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "L A X I O" + ChatColor.GRAY + " - TEST SERVER\n" + ChatColor.YELLOW + "Your Protocol version " + packet.getConnection().getProtocolVersion());
+        packet.reply(new ResponsePacket(builder.build()));
     }
 
     @PacketHandler(priority = ListenerPriority.MONITOR)

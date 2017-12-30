@@ -14,6 +14,7 @@ import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.command.AphelionHandler;
 import org.laxio.piston.sticky.command.PistonConsoleCommandSender;
 import org.laxio.piston.sticky.listener.FeatureListener;
+import org.laxio.piston.sticky.listener.HandshakeListener;
 import org.laxio.piston.sticky.listener.LoginListener;
 import org.laxio.piston.sticky.listener.StatusListener;
 import org.laxio.piston.sticky.session.OfflineSessionService;
@@ -53,6 +54,7 @@ public class StickyPistonServer implements PistonServer {
 
         this.manager.register(new StatusListener());
         this.manager.register(new LoginListener(this));
+        this.manager.register(new HandshakeListener());
         this.manager.register(new FeatureListener());
 
         this.console = new PistonConsoleCommandSender();
