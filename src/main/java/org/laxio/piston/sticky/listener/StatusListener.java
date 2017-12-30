@@ -16,7 +16,7 @@ public class StatusListener implements Listener {
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onRequest(RequestPacket packet) {
         MessageBuilder builder = MessageBuilder.builder();
-        builder.message(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "L A X I O" + ChatColor.GRAY + " - TEST SERVER\n" + ChatColor.YELLOW + "Your Protocol version " + packet.getConnection().getProtocolVersion());
+        builder.message(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "P I S T O N" + ChatColor.GRAY + " - TEST SERVER\n" + ChatColor.YELLOW + "Your Protocol version " + packet.getConnection().getProtocolVersion());
         packet.reply(new ResponsePacket(builder.build()));
     }
 

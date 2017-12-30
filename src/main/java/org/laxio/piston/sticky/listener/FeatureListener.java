@@ -10,7 +10,7 @@ public class FeatureListener implements Listener {
     @EventHandler
     public void onLogin(PlayerPreLoginEvent event) {
         event.setResult(PlayerPreLoginEvent.LoginResult.DISALLOWED);
-        event.setKickMessage(ChatColor.DARK_RED + "" + ChatColor.BOLD + "L A X I O\n\n" + ChatColor.WHITE + "Is not " + ChatColor.ITALIC + "currently" + ChatColor.WHITE + " ready for logins");
+        event.setKickMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "P I S T O N\n\n" + ChatColor.YELLOW + "Is not " + ChatColor.ITALIC + "currently" + ChatColor.YELLOW + " ready for logins");
     }
 
 }
