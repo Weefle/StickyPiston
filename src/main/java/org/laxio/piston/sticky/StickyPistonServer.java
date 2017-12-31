@@ -6,10 +6,13 @@ import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.command.CommandSender;
 import org.laxio.piston.piston.command.ConsoleCommandSender;
 import org.laxio.piston.piston.event.ListenerManager;
+import org.laxio.piston.piston.list.LockableLinkedList;
 import org.laxio.piston.piston.logging.Logger;
 import org.laxio.piston.piston.protocol.Protocol;
 import org.laxio.piston.piston.session.MinecraftSessionService;
 import org.laxio.piston.piston.translator.ProtocolTranslator;
+import org.laxio.piston.piston.versioning.PistonModuleType;
+import org.laxio.piston.piston.versioning.Version;
 import org.laxio.piston.protocol.v340.netty.NetworkServer;
 import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.command.AphelionHandler;
@@ -39,6 +42,9 @@ public class StickyPistonServer implements PistonServer {
         STICKY_PISTON_VERSION = StickyPistonServer.class.getPackage().getImplementationVersion();
     }
 
+    private final String name;
+    private final Logger logger;
+
     private final KeyPair keyPair;
     private final boolean onlineMode;
     private final MinecraftSessionService sessionService;
@@ -53,11 +59,24 @@ public class StickyPistonServer implements PistonServer {
     private final List<ProtocolTranslator> translators;
 
     public StickyPistonServer(Protocol protocol) {
+        this(protocol, null);
+    }
+
+    public StickyPistonServer(Protocol protocol, String name) {
+        this.logger = name == null ? Logger.getGlobal() : Logger.getLogger(name);
+        if (name == null) {
+            name = "DEFAULT";
+        }
+
+        this.name = name;
+
         this.onlineMode = true;
         this.keyPair = (onlineMode ? generate() : null);
         this.sessionService = (onlineMode ? new MojangSessionService(this) : new OfflineSessionService());
 
         this.protocol = protocol;
+        this.protocol.setServer(this);
+
         this.manager = new ListenerManager();
 
         this.manager.register(new StatusListener());
@@ -75,13 +94,13 @@ public class StickyPistonServer implements PistonServer {
     }
 
     @Override
-    public String getVersion() {
-        return STICKY_PISTON_VERSION;
+    public Version getVersion() {
+        return PistonModuleType.STICKYPISTON.getModule().getVersion();
     }
 
     @Override
-    public String getMinecraftVersion() {
-        return MC_PROTOCOL_VERSION;
+    public Version getMinecraftVersion() {
+        return PistonModuleType.MINECRAFT.getModule().getVersion();
     }
 
     public NetworkServer getNetwork() {
@@ -108,8 +127,8 @@ public class StickyPistonServer implements PistonServer {
     }
 
     @Override
-    public Protocol getProtocol(int id) {
-        return this.loadedProtocols.get(id);
+    public Protocol getProtocol(int version) {
+        return this.loadedProtocols.get(version);
     }
 
     @Override
@@ -118,7 +137,19 @@ public class StickyPistonServer implements PistonServer {
     }
 
     public List<ProtocolTranslator> getTranslators() {
-        return translators;
+        return new LockableLinkedList<>(translators).setLocked(true);
+    }
+
+    @Override
+    public boolean addTranslator(ProtocolTranslator translator) {
+        for (ProtocolTranslator item : translators) {
+            if (item.getClass().equals(translator.getClass())) {
+                return false;
+            }
+        }
+
+        translators.add(translator);
+        return true;
     }
 
     @Override
@@ -138,7 +169,7 @@ public class StickyPistonServer implements PistonServer {
 
     @Override
     public Logger getLogger() {
-        return Logger.getGlobal();
+        return logger;
     }
 
     @Override

@@ -1,14 +1,13 @@
 package org.laxio.piston.sticky.logging;
 
 import org.laxio.piston.piston.chat.ChatColor;
+import org.laxio.piston.piston.chat.StatusLevel;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
-
-import static org.laxio.piston.sticky.logging.LogUtil.names;
 
 public class ConsoleFormatter extends Formatter {
 
@@ -27,13 +26,9 @@ public class ConsoleFormatter extends Formatter {
             throwable = level.toString();
         }
 
-        String level = names.get(record.getLevel());
-        if (level == null) {
-            level = record.getLevel().getLocalizedName();
-            names.put(record.getLevel(), level);
-        }
-
-        return ChatColor.getConsoleString(ChatColor.RESET + String.format("[%1$tl:%1$tM:%1$tS %1$Tp %3$s]: %4$s%5$s%n", dat, record.getLoggerName(), level, message, throwable));
+        StatusLevel status = StatusLevel.getLevel(record.getLevel());
+        String level = "" + status.getColor() + record.getLevel() + ChatColor.RESET;
+        return ChatColor.getConsoleString(ChatColor.RESET + String.format("[%1$tH:%1$tM:%1$tS %3$s]: %4$s%5$s%n", dat, record.getLoggerName(), level, message, throwable));
     }
 
 }
