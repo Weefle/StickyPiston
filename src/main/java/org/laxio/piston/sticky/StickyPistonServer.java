@@ -9,6 +9,7 @@ import org.laxio.piston.piston.event.ListenerManager;
 import org.laxio.piston.piston.logging.Logger;
 import org.laxio.piston.piston.protocol.Protocol;
 import org.laxio.piston.piston.session.MinecraftSessionService;
+import org.laxio.piston.piston.translator.ProtocolTranslator;
 import org.laxio.piston.protocol.v340.netty.NetworkServer;
 import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.command.AphelionHandler;
@@ -23,6 +24,10 @@ import java.net.InetSocketAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StickyPistonServer implements PistonServer {
 
@@ -44,6 +49,9 @@ public class StickyPistonServer implements PistonServer {
     private final AphelionHandler aphelion;
     private NetworkServer network;
 
+    private final Map<Integer, Protocol> loadedProtocols;
+    private final List<ProtocolTranslator> translators;
+
     public StickyPistonServer(Protocol protocol) {
         this.onlineMode = true;
         this.keyPair = (onlineMode ? generate() : null);
@@ -59,6 +67,11 @@ public class StickyPistonServer implements PistonServer {
 
         this.console = new PistonConsoleCommandSender();
         this.aphelion = new AphelionHandler();
+
+        this.loadedProtocols = new HashMap<>();
+        addProtocol(protocol);
+
+        this.translators = new ArrayList<>();
     }
 
     @Override
@@ -92,6 +105,20 @@ public class StickyPistonServer implements PistonServer {
     @Override
     public Protocol getProtocol() {
         return protocol;
+    }
+
+    @Override
+    public Protocol getProtocol(int id) {
+        return this.loadedProtocols.get(id);
+    }
+
+    @Override
+    public void addProtocol(Protocol protocol) {
+        this.loadedProtocols.put(protocol.getVersion(), protocol);
+    }
+
+    public List<ProtocolTranslator> getTranslators() {
+        return translators;
     }
 
     @Override
