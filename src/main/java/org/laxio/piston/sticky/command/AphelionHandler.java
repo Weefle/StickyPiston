@@ -22,6 +22,10 @@ public class AphelionHandler {
         };
     }
 
+    public AphelionHandler(Aphelion<CommandSender> aphelion) {
+        this.aphelion = aphelion;
+    }
+
     public Aphelion<CommandSender> getAphelion() {
         return aphelion;
     }

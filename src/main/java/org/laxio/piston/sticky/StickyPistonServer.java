@@ -17,6 +17,7 @@ import org.laxio.piston.protocol.v340.netty.NetworkServer;
 import org.laxio.piston.protocol.v340.session.MojangSessionService;
 import org.laxio.piston.sticky.command.AphelionHandler;
 import org.laxio.piston.sticky.command.PistonConsoleCommandSender;
+import org.laxio.piston.sticky.command.server.ManageServerCommands;
 import org.laxio.piston.sticky.listener.FeatureListener;
 import org.laxio.piston.sticky.listener.HandshakeListener;
 import org.laxio.piston.sticky.listener.LoginListener;
@@ -72,8 +73,9 @@ public class StickyPistonServer implements PistonServer {
         this.manager.register(new HandshakeListener(this));
         this.manager.register(new FeatureListener(this));
 
-        this.console = new PistonConsoleCommandSender();
+        this.console = new PistonConsoleCommandSender(this);
         this.aphelion = new AphelionHandler();
+        this.getCommandRegistration().register(ManageServerCommands.class);
 
         this.loadedProtocols = new HashMap<>();
         addProtocol(protocol);
@@ -171,6 +173,11 @@ public class StickyPistonServer implements PistonServer {
     }
 
     @Override
+    public void runCommand(CommandSender sender, String command) {
+        aphelion.handle(sender, command);
+    }
+
+    @Override
     public Aphelion<CommandSender> getAphelion() {
         return aphelion.getAphelion();
     }
@@ -217,7 +224,7 @@ public class StickyPistonServer implements PistonServer {
 
             String time = (duration - ms) + "." + String.format("%03d", ms) + "s";
 
-            getLogger().info("Server{}started ({})", (started ? " " : " not "), time);
+            getLogger().info("Server{}started ({}) {}:{}", (started ? " " : " not "), time, getBindAddress().getHostString(), getBindAddress().getPort());
 
             return started;
         }
@@ -230,7 +237,9 @@ public class StickyPistonServer implements PistonServer {
 
     @Override
     public void stop() {
+        getLogger().warning("Server shutting down...");
         network.shutdown();
+        getLogger().warning("Server shut down");
     }
 
 }
