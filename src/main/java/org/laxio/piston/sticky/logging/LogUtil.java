@@ -1,17 +1,11 @@
 package org.laxio.piston.sticky.logging;
 
 import org.fusesource.jansi.Ansi;
-import org.laxio.piston.piston.chat.ChatColor;
-import org.laxio.piston.piston.chat.StatusLevel;
 import org.laxio.piston.piston.versioning.PistonModule;
 import org.laxio.piston.piston.versioning.PistonModuleType;
 import org.laxio.piston.piston.versioning.Version;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +15,8 @@ import static org.laxio.piston.piston.chat.ChatColor.*;
 
 public class LogUtil {
 
-    static final Logger logger;
-    static final PrintStream out;
-
-    static final List<Level> levels = new ArrayList<>();
-    static final Map<Level, String> names = new HashMap<>();
+    private static final Logger logger;
+    private static final PrintStream out;
 
     static {
         BLACK.setConsole(Ansi.ansi().a(Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
@@ -51,32 +42,13 @@ public class LogUtil {
         ITALIC.setConsole(Ansi.ansi().a(Attribute.ITALIC).toString());
         RESET.setConsole(Ansi.ansi().a(Attribute.RESET).toString());
 
-        levels.add(Level.ALL);
-        levels.add(Level.CONFIG);
-        levels.add(Level.FINE);
-        levels.add(Level.FINER);
-        levels.add(Level.FINEST);
-        levels.add(Level.INFO);
-        levels.add(Level.OFF);
-        levels.add(Level.SEVERE);
-        levels.add(Level.WARNING);
-
-        for (Level level : levels) {
-            StatusLevel status = StatusLevel.NORMAL;
-            if (level == Level.CONFIG) {
-                status = StatusLevel.CONFIG;
-            } else if (level == Level.WARNING) {
-                status = StatusLevel.WARNING;
-            } else if (level == Level.SEVERE) {
-                status = StatusLevel.SEVERE;
-            }
-
-            colour(level, status);
-        }
-
         logger = Logger.getGlobal();
 
         out = System.out;
+    }
+
+    public static PrintStream getOut() {
+        return out;
     }
 
     public static void init(Handler handle) {
@@ -109,10 +81,6 @@ public class LogUtil {
 
             logger.info("Loaded " + module.getTitle() + " v" + name);
         }
-    }
-
-    private static void colour(Level level, StatusLevel status) {
-        names.put(level, "" + status.getColor() + level + ChatColor.RESET);
     }
 
 }

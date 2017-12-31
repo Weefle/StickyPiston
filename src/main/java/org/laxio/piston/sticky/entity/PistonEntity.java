@@ -11,7 +11,7 @@ public abstract class PistonEntity implements Entity {
 
     private static final Object lock = new Object();
 
-    protected static int entityId = 1;
+    private static int entityId = 1;
 
     private final PistonServer server;
 
@@ -28,7 +28,6 @@ public abstract class PistonEntity implements Entity {
         this.server = server;
         synchronized (lock) {
             this.id = entityId++;
-            entityId++;
         }
 
         this.uuid = uuid == null ? UUID.randomUUID() : uuid;
