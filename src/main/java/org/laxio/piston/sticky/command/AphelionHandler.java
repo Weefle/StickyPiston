@@ -30,9 +30,41 @@ public class AphelionHandler {
         return aphelion.getRegistration();
     }
 
+    /**
+     * Handles the supplied input
+     *
+     * @param sender The sender of the input
+     * @param string The input being sent
+     */
     public void handle(CommandSender sender, String string) {
-        if (string == null) {
+        if (!valid(string)) {
             return;
+        }
+
+        String[] split = string.split(" ");
+
+        String command = split[0];
+        String[] args = args(split);
+
+        CommandHandler<CommandSender> handler = aphelion.getCommand(command);
+        if (handler == null) {
+            sender.sendMessage(StatusLevel.WARNING, "Command not found");
+            return;
+        }
+
+        invoke(sender, command, args, handler);
+    }
+
+    /**
+     * Checks the supplied string to see if it is a valid command input
+     *
+     * @param string The string to validate
+     *
+     * @return true if it is valid, false otherwise
+     */
+    private boolean valid(String string) {
+        if (string == null) {
+            return false;
         }
 
         boolean blank = true;
@@ -44,24 +76,34 @@ public class AphelionHandler {
             }
         }
 
-        if (blank) {
-            return;
-        }
+        return !blank;
+    }
 
-        String[] split = string.split(" ");
-
-        String command = split[0];
+    /**
+     * Returns the arguments for the supplied array
+     *
+     * @param split The full split
+     *
+     * @return The shortened split
+     */
+    private String[] args(String[] split) {
         String[] args = new String[split.length - 1];
         if (args.length > 0) {
             System.arraycopy(split, 1, args, 0, split.length - 1);
         }
 
-        CommandHandler<CommandSender> handler = aphelion.getCommand(command);
-        if (handler == null) {
-            sender.sendMessage(StatusLevel.WARNING, "Command not found");
-            return;
-        }
+        return args;
+    }
 
+    /**
+     * Invokes the command and handles any exceptions
+     *
+     * @param sender  The sender of the command
+     * @param command The label of the command being invoked
+     * @param args    The arguments of the command
+     * @param handler The command being invoked
+     */
+    private void invoke(CommandSender sender, String command, String[] args, CommandHandler<CommandSender> handler) {
         try {
             aphelion.invoke(sender, command, args, handler);
         } catch (CommandPermissionException e) {
