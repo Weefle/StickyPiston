@@ -34,14 +34,6 @@ import java.util.Map;
 
 public class StickyPistonServer implements PistonServer {
 
-    private static final String MC_PROTOCOL_VERSION; // MC Version (Specification)
-    private static final String STICKY_PISTON_VERSION; // Protocol Version (Implementation)
-
-    static {
-        MC_PROTOCOL_VERSION = StickyPistonServer.class.getPackage().getSpecificationVersion();
-        STICKY_PISTON_VERSION = StickyPistonServer.class.getPackage().getImplementationVersion();
-    }
-
     private final String name;
     private final Logger logger;
 
@@ -64,11 +56,7 @@ public class StickyPistonServer implements PistonServer {
 
     public StickyPistonServer(Protocol protocol, String name) {
         this.logger = name == null ? Logger.getGlobal() : Logger.getLogger(name);
-        if (name == null) {
-            name = "DEFAULT";
-        }
-
-        this.name = name;
+        this.name = name == null ? "DEFAULT" : name;
 
         this.onlineMode = true;
         this.keyPair = (onlineMode ? generate() : null);
