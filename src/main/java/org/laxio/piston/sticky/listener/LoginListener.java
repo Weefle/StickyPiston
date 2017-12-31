@@ -4,6 +4,7 @@ import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.entity.player.Player;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
+import org.laxio.piston.piston.event.listener.ListenerOwner;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
 import org.laxio.piston.piston.event.login.PlayerPreLoginEvent;
 import org.laxio.piston.piston.protocol.Connection;
@@ -31,6 +32,11 @@ public class LoginListener implements Listener {
 
     public LoginListener(PistonServer server) {
         this.server = server;
+    }
+
+    @Override
+    public ListenerOwner getOwner() {
+        return server;
     }
 
     @PacketHandler(priority = ListenerPriority.MONITOR)

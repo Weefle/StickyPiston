@@ -1,9 +1,11 @@
 package org.laxio.piston.sticky.listener;
 
+import org.laxio.piston.piston.PistonServer;
 import org.laxio.piston.piston.chat.ChatColor;
 import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
+import org.laxio.piston.piston.event.listener.ListenerOwner;
 import org.laxio.piston.piston.event.listener.ListenerPriority;
 import org.laxio.piston.protocol.v340.netty.NetworkClient;
 import org.laxio.piston.protocol.v340.packet.status.client.PongPacket;
@@ -13,10 +15,22 @@ import org.laxio.piston.protocol.v340.packet.status.server.RequestPacket;
 
 public class StatusListener implements Listener {
 
+    private final PistonServer server;
+
+    public StatusListener(PistonServer server) {
+        this.server = server;
+    }
+
+    @Override
+    public ListenerOwner getOwner() {
+        return server;
+    }
+
     @PacketHandler(priority = ListenerPriority.MONITOR)
     public void onRequest(RequestPacket packet) {
         MessageBuilder builder = MessageBuilder.builder();
-        builder.message(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "P I S T O N" + ChatColor.GRAY + " - TEST SERVER\n" + ChatColor.YELLOW + "Your Protocol version " + packet.getConnection().getProtocolVersion());
+        builder.message(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "P I S T O N" + ChatColor.GRAY + " - " + ChatColor.RED + packet.getServer().getName() + "\n"
+                + ChatColor.YELLOW + "Your Protocol version " + packet.getConnection().getProtocolVersion());
         packet.reply(new ResponsePacket(builder.build()));
     }
 

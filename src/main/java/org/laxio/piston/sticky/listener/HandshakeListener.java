@@ -5,6 +5,7 @@ import org.laxio.piston.piston.chat.ChatColor;
 import org.laxio.piston.piston.chat.MessageBuilder;
 import org.laxio.piston.piston.event.PacketHandler;
 import org.laxio.piston.piston.event.listener.Listener;
+import org.laxio.piston.piston.event.listener.ListenerOwner;
 import org.laxio.piston.piston.protocol.ProtocolState;
 import org.laxio.piston.piston.translator.ProtocolTranslator;
 import org.laxio.piston.protocol.v340.netty.NetworkClient;
@@ -12,6 +13,17 @@ import org.laxio.piston.protocol.v340.packet.handshake.server.HandshakePacket;
 import org.laxio.piston.protocol.v340.packet.login.client.DisconnectPacket;
 
 public class HandshakeListener implements Listener {
+
+    private final PistonServer server;
+
+    public HandshakeListener(PistonServer server) {
+        this.server = server;
+    }
+
+    @Override
+    public ListenerOwner getOwner() {
+        return server;
+    }
 
     @PacketHandler
     public void onHandshake(HandshakePacket packet) {

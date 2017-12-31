@@ -79,10 +79,10 @@ public class StickyPistonServer implements PistonServer {
 
         this.manager = new ListenerManager();
 
-        this.manager.register(new StatusListener());
+        this.manager.register(new StatusListener(this));
         this.manager.register(new LoginListener(this));
-        this.manager.register(new HandshakeListener());
-        this.manager.register(new FeatureListener());
+        this.manager.register(new HandshakeListener(this));
+        this.manager.register(new FeatureListener(this));
 
         this.console = new PistonConsoleCommandSender();
         this.aphelion = new AphelionHandler();
@@ -91,6 +91,11 @@ public class StickyPistonServer implements PistonServer {
         addProtocol(protocol);
 
         this.translators = new ArrayList<>();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -201,6 +206,43 @@ public class StickyPistonServer implements PistonServer {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void handle(Exception ex) {
+        ex.printStackTrace();
+    }
+
+    @Override
+    public boolean start() {
+        if (isRunning()) {
+            return false;
+        }
+
+        long start = System.currentTimeMillis();
+        synchronized (network.getRequest()) {
+            network.run();
+
+            boolean started = network.getRequest().isStarted();
+            long duration = System.currentTimeMillis() - start;
+            long ms = duration % 1000;
+
+            String time = (duration - ms) + "." + String.format("%03d", ms) + "s";
+
+            getLogger().info("Server{}started ({})", (started ? " " : " not "), time);
+
+            return started;
+        }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return network.isAlive();
+    }
+
+    @Override
+    public void stop() {
+        network.shutdown();
     }
 
 }
