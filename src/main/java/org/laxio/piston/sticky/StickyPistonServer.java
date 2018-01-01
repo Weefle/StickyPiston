@@ -4,7 +4,7 @@ package org.laxio.piston.sticky;
          * #%L
          * StickyPiston
          * %%
-         * Copyright (C) 2017 Laxio
+         * Copyright (C) 2017 - 2018 Laxio
          * %%
          * This file is part of Piston, licensed under the MIT License (MIT).
          *
@@ -62,10 +62,9 @@ public class StickyPistonServer implements PistonServer {
 
     private final ConsoleCommandSender console;
     private final AphelionHandler aphelion;
-    private NetworkServer network;
-
     private final Map<Integer, Protocol> loadedProtocols;
     private final List<ProtocolTranslator> translators;
+    private NetworkServer network;
 
     public StickyPistonServer(Protocol protocol) {
         this(protocol, null);

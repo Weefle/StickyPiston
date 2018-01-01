@@ -101,4 +101,4 @@ MANIFEST.MF
 dependency-reduced-pom.xml
 
 Thumbs.db
-src/main/resources/rebel.xml
+src/licenses/licenses.properties_*

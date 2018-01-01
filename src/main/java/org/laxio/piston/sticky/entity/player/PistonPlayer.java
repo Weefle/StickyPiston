@@ -4,7 +4,7 @@ package org.laxio.piston.sticky.entity.player;
          * #%L
          * StickyPiston
          * %%
-         * Copyright (C) 2017 Laxio
+         * Copyright (C) 2017 - 2018 Laxio
          * %%
          * This file is part of Piston, licensed under the MIT License (MIT).
          *
