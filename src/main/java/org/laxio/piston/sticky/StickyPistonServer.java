@@ -148,7 +148,7 @@ public class StickyPistonServer implements PistonServer {
     }
 
     public List<ProtocolTranslator> getTranslators() {
-        return new LockableLinkedList<>(translators).setLocked(true);
+        return LockableLinkedList.createLocked(translators);
     }
 
     @Override
