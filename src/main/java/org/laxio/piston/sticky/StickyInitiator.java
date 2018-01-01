@@ -33,7 +33,7 @@ public class StickyInitiator {
     private static final Object lock = new Object();
 
     /**
-     * Creates PistonModules for all available
+     * Creates PistonModules for all available PistonModuleTypes
      *
      * @see org.laxio.piston.piston.versioning.PistonModuleType
      */
